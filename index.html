@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Our Love Story 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+background:linear-gradient(135deg,#000000,#1a001f,#000000);
+color:white;
+text-align:center;
+overflow:hidden;
+}
+
+/* SECTION */
+.section{
+display:none;
+height:100vh;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+animation:fadeIn 1s ease;
+}
+.active{display:flex;}
+
+@keyframes fadeIn{
+from{opacity:0;transform:scale(.95)}
+to{opacity:1;transform:scale(1)}
+}
+
+/* HEADINGS */
+h1,h2{
+text-shadow:0 0 20px #ff4d9d,0 0 40px #ff0080;
+letter-spacing:1px;
+}
+
+/* BUTTON */
+button{
+padding:14px 35px;
+border:none;
+border-radius:40px;
+cursor:pointer;
+background:linear-gradient(45deg,#ff0080,#ff4d6d);
+color:white;
+font-size:17px;
+font-weight:bold;
+box-shadow:0 0 20px #ff4d9d;
+transition:.4s;
+}
+button:hover{
+transform:scale(1.1);
+box-shadow:0 0 40px #ff0080,0 0 80px #ff4d9d;
+}
+
+/* INPUT */
+input{
+padding:14px;
+border-radius:40px;
+border:none;
+text-align:center;
+margin-top:20px;
+width:250px;
+font-size:16px;
+background:rgba(255,255,255,0.1);
+color:white;
+outline:none;
+backdrop-filter:blur(10px);
+box-shadow:0 0 20px #ff4d9d;
+}
+input::placeholder{color:#ffcce6}
+
+/* QUIZ BOX */
+.quiz-box{
+padding:40px;
+border-radius:25px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(15px);
+border:2px solid rgba(255,0,128,0.5);
+box-shadow:0 0 40px #ff0080;
+animation:glowBox 2s infinite alternate;
+}
+
+@keyframes glowBox{
+from{box-shadow:0 0 20px #ff4d9d}
+to{box-shadow:0 0 60px #ff0080}
+}
+
+.quiz-box button{
+margin-top:25px;
+}
+
+/* SHAKE */
+@keyframes shake{
+0%{transform:translateX(0)}
+25%{transform:translateX(-5px)}
+50%{transform:translateX(5px)}
+75%{transform:translateX(-5px)}
+100%{transform:translateX(0)}
+}
+
+/* STARS */
+.star{
+position:fixed;
+font-size:22px;
+pointer-events:none;
+transition:1.2s ease-out;
+}
+
+/* GAME */
+.grid{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:15px;
+max-width:420px;
+margin:auto;
+}
+
+.card{
+width:70px;
+height:70px;
+background:rgba(255,255,255,0.1);
+border-radius:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+overflow:hidden;
+backdrop-filter:blur(10px);
+box-shadow:0 0 15px #ff4d9d;
+transition:.4s;
+}
+.card:hover{
+transform:scale(1.1);
+box-shadow:0 0 30px #ff0080;
+}
+.card::before{
+content:"💖";
+font-size:25px;
+}
+.card img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:none;
+}
+.card.open img{display:block}
+.card.open::before{display:none}
+
+/* WEDDING GIF */
+.gif-bg{
+position:fixed;
+inset:0;
+background:url("wedding.gif") center/cover no-repeat;
+z-index:-1;
+animation:zoomBg 8s infinite alternate ease-in-out;
+}
+@keyframes zoomBg{
+from{transform:scale(1)}
+to{transform:scale(1.1)}
+}
+
+/* ANNIVERSARY TEXT */
+#anniversary h1{
+font-size:40px;
+background:linear-gradient(45deg,#fff,#ff4d9d,#fff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:glowText 2s infinite alternate;
+}
+@keyframes glowText{
+from{text-shadow:0 0 20px #ff4d9d}
+to{text-shadow:0 0 50px #ff0080}
+}
+
+/* FINAL PAGE */
+.photo{
+width:260px;
+border-radius:25px;
+margin-top:25px;
+box-shadow:0 0 40px #ff0080;
+transition:1s;
+}
+.photo:hover{transform:scale(1.05)}
+
+#blastText{
+font-size:35px;
+text-shadow:0 0 30px #ff4d9d;
+animation:pulse 1.5s infinite alternate;
+}
+@keyframes pulse{
+from{transform:scale(1)}
+to{transform:scale(1.1)}
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div id="intro" class="section active">
+<h1>This is not just a website…</h1>
+<h2>This is Our Love Story 💖</h2>
+</div>
+
+<!-- ENTER -->
+<div id="enter" class="section">
+<h1>Ready Jeeva? 💍</h1>
+<button onclick="startQuiz()">Enter Our Love Journey</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="section">
+<div class="quiz-box">
+<h2 id="questionText"></h2>
+<input id="answerInput" placeholder="Type your answer...">
+<button onclick="nextQuestion()">Next ❤️</button>
+</div>
+</div>
+
+<!-- BLAST -->
+<div id="blast" class="section">
+<h1 id="blastText"></h1>
+</div>
+
+<!-- GAME -->
+<div id="game" class="section">
+<h2>Match Our Beautiful Memories 💞</h2>
+<div class="grid" id="board"></div>
+</div>
+
+<!-- ANNIVERSARY -->
+<div id="anniversary" class="section">
+<div class="gif-bg"></div>
+<h1>Happy 1st Wedding Anniversary 💍❤️</h1>
+</div>
+
+<!-- FINAL -->
+<div id="loveFinal" class="section">
+<h1>Forever Us 💖</h1>
+<p>
+One year down, forever to go ❤️<br><br>
+You are my today and all of my tomorrows 💍<br><br>
+Life with you is my greatest blessing 💕
+</p>
+<img src="img21.jpeg" class="photo">
+</div>
+
+<script>
+
+/* FLOW */
+setTimeout(()=>{show("enter")},3000);
+
+function show(id){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+
+if(id==="loveFinal"){
+fullBlast();   // ⭐ Auto star blast
+}
+}
+
+/* QUIZ DATA */
+const questions=[
+{q:"My Favourite Color?",a:"blue"},
+{q:"First Meeting Date?",a:"01-01-2024"},
+{q:"My Dress That Day?",a:"chudidhar"},
+{q:"Dress Color?",a:"green with block"},
+{q:"First Meeting Place?",a:"Murugar Temple"},
+{q:"Our Memorable Moment?",a:"Light House"}
+];
+
+let current=0;
+
+function startQuiz(){
+show("quiz");
+loadQuestion();
+}
+
+function loadQuestion(){
+questionText.innerText=questions[current].q;
+answerInput.value="";
+}
+
+function nextQuestion(){
+let val = answerInput.value.trim().toLowerCase();
+let correctAnswer = questions[current].a.trim().toLowerCase();
+
+if(val === correctAnswer){
+current++;
+sparkle();
+
+if(current < questions.length){
+loadQuestion();
+}else{
+show("blast");
+diwaliBlast();
+
+setTimeout(()=>blastText.innerText="🎉 Congratulations Jeeva ❤️",1000);
+setTimeout(()=>blastText.innerText="🎁 Go To Another Gift",3000);
+
+setTimeout(()=>{
+show("game");
+initGame();
+},5000);
+}
+
+}else{
+answerInput.style.animation="shake .3s";
+setTimeout(()=>answerInput.style.animation="",300);
+}
+}
+/* SPARKLE */
+function sparkle(){
+for(let i=0;i<30;i++){
+let s=document.createElement("div");
+s.className="star";
+s.innerText="✨";
+s.style.left=Math.random()*100+"vw";
+s.style.top=Math.random()*100+"vh";
+document.body.appendChild(s);
+setTimeout(()=>{s.style.opacity=0;s.remove()},800);
+}
+}
+
+/* DIWALI */
+function diwaliBlast(){
+for(let i=0;i<300;i++){
+let s=document.createElement("div");
+s.className="star";
+s.innerText=["✨","⭐","💫","💖"][Math.floor(Math.random()*4)];
+s.style.left="50vw";
+s.style.top="50vh";
+document.body.appendChild(s);
+let angle=Math.random()*2*Math.PI;
+let distance=Math.random()*700;
+let x=Math.cos(angle)*distance;
+let y=Math.sin(angle)*distance;
+setTimeout(()=>{
+s.style.transform=`translate(${x}px,${y}px) scale(0)`;
+s.style.opacity=0;
+},10);
+setTimeout(()=>s.remove(),1200);
+}
+}
+
+/* MATCH GAME */
+/* MATCH GAME */
+const images = [
+{src:"img1.jpeg", pair:1},
+{src:"img2.jpeg", pair:1},
+
+{src:"img3.jpeg", pair:2},
+{src:"img7.jpeg", pair:2},
+
+{src:"img5.jpeg", pair:3},
+{src:"img6.jpeg", pair:3},
+
+{src:"img9.jpeg", pair:4},
+{src:"img8.jpeg", pair:4},
+
+{src:"img9.jpeg", pair:5},
+{src:"img10.jpeg", pair:5},
+
+
+{src:"img11.jpeg", pair:11},
+{src:"img15.jpeg", pair:11},
+
+{src:"img13.jpeg", pair:12},
+{src:"img20.jpeg", pair:12},
+
+
+{src:"img17.jpeg", pair:14},
+{src:"img27.jpeg", pair:14},
+
+{src:"img18.jpeg", pair:15},
+{src:"img28.jpeg", pair:15},
+
+{src:"img19.jpeg", pair:6},
+{src:"img29.jpeg", pair:6},
+
+{src:"img26.jpeg", pair:7},
+{src:"img16.jpeg", pair:7},
+
+{src:"img22.jpeg", pair:8},
+{src:"img14.jpeg", pair:8},
+
+{src:"img31.jpeg", pair:9},
+{src:"img41.jpeg", pair:9},
+
+{src:"img32.jpeg", pair:10},
+{src:"img42.jpeg", pair:10
+
+}
+
+
+
+];
+
+let firstCard=null;
+let lock=false;
+let matched=0;
+
+function initGame(){
+board.innerHTML="";
+matched=0;
+firstCard=null;
+lock=false;
+
+/* shuffle */
+let shuffled=[...images].sort(()=>0.5-Math.random());
+
+shuffled.forEach(item=>{
+let card=document.createElement("div");
+card.className="card";
+card.dataset.pair=item.pair;
+
+let img=document.createElement("img");
+img.src=item.src;
+card.appendChild(img);
+
+card.onclick=function(){
+if(lock || card.classList.contains("open")) return;
+
+card.classList.add("open");
+
+if(!firstCard){
+firstCard=card;
+}else{
+if(firstCard.dataset.pair === card.dataset.pair){
+matched++;
+firstCard=null;
+
+if(matched===5){
+fullBlast();
+setTimeout(()=>show("anniversary"),2000);
+setTimeout(()=>show("loveFinal"),5000);
+}
+
+}else{
+lock=true;
+setTimeout(()=>{
+firstCard.classList.remove("open");
+card.classList.remove("open");
+firstCard=null;
+lock=false;
+},800);
+}
+}
+};
+
+board.appendChild(card);
+});
+}
+
+/* FINAL BLAST */
+function fullBlast(){
+for(let i=0;i<400;i++){
+let s=document.createElement("div");
+s.className="star";
+s.innerText=["✨","⭐","💫","💖"][Math.floor(Math.random()*4)];
+s.style.left=Math.random()*100+"vw";
+s.style.top=Math.random()*100+"vh";
+document.body.appendChild(s);
+setTimeout(()=>{
+s.style.transform="scale(0)";
+s.style.opacity=0;
+},10);
+setTimeout(()=>s.remove(),1200);
+}
+}
+</script>
+
+</body>
+</html>
