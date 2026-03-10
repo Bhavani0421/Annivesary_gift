@@ -43,6 +43,22 @@ margin-top:20px;
 box-shadow:0 0 20px #ff0080;
 }
 
+.quiz-box{
+padding:40px;
+border-radius:25px;
+background:rgba(255,255,255,0.05);
+border:2px solid rgba(255,0,128,0.5);
+}
+
+input{
+padding:12px 20px;
+border-radius:25px;
+border:none;
+margin-top:15px;
+width:220px;
+font-size:16px;
+}
+
 .heart{
 position:absolute;
 font-size:25px;
@@ -61,29 +77,8 @@ animation:blastAnim 1.5s ease-out forwards;
 }
 
 @keyframes blastAnim{
-0%{transform:scale(0) translate(0,0);opacity:1;}
+0%{transform:scale(0);opacity:1;}
 100%{transform:scale(2) translate(var(--x),var(--y));opacity:0;}
-}
-
-.quiz-box{
-padding:40px;
-border-radius:25px;
-background:rgba(255,255,255,0.05);
-border:2px solid rgba(255,0,128,0.5);
-}
-
-.option{
-padding:12px 20px;
-margin:10px;
-border-radius:30px;
-background:#ff0080;
-cursor:pointer;
-display:inline-block;
-box-shadow:0 0 10px #ff0080;
-}
-
-.option:hover{
-background:#ff4d6d;
 }
 
 .grid{
@@ -169,48 +164,83 @@ min-height:180px;
 <!-- QUIZ -->
 
 <div id="quiz" class="section">
+
 <div class="quiz-box">
+
 <h2 id="questionText"></h2>
-<div id="options"></div>
-</div>
+
+<input type="text" id="answerInput" placeholder="Type your answer">
+
+<br>
+
+<button onclick="checkAnswer()">Submit ❤️</button>
+
+<div style="margin-top:20px;width:250px;height:15px;background:#333;border-radius:20px;">
+<div id="loveMeter" style="height:100%;width:0%;background:#ff0080;border-radius:20px;"></div>
 </div>
 
-<!-- GAME -->
+<p id="lovePercent">Love Meter ❤️ 0%</p>
+
+</div>
+
+</div>
+
+<!-- MEMORY GAME -->
 
 <div id="game" class="section">
+
 <h2>Match Our Memories 💞</h2>
+
 <div class="grid" id="board"></div>
 
 <div id="anniversaryMessage" style="display:none;font-size:30px;margin-top:20px;color:#ff4d9a;">
-Happy 1st Anniversary My Dear Vanna Manavey ❤️
+Happy 1st Anniversary My Dear ❤️
 </div>
+
+</div>
+
+<!-- FINAL QUESTION -->
+
+<div id="final" class="section">
+
+<h1>I Have One Last Question ❤️</h1>
+
+<h2>Will you stay with me forever?</h2>
+
+<button onclick="finalYes()">YES ❤️</button>
+<button onclick="finalYes()">FOREVER ❤️</button>
+
 </div>
 
 <!-- GALLERY -->
 
 <div id="gallery" class="section">
+
 <h1>Our Beautiful Memories 📸</h1>
+
 <div class="gallery">
 <img id="slide" src="photos/img60.jpeg">
 </div>
+
 <button onclick="showLetter()">Next ❤️</button>
+
 </div>
 
 <!-- LETTER -->
 
 <div id="letter" class="section">
+
 <h1>My Love 💌</h1>
+
 <p id="letterText" class="letter"></p>
 
-<img src="photos/img21.jpeg"
-style="width:200px;border-radius:20px;margin-top:20px;box-shadow:0 0 30px #ff0080;">
+<img src="photos/img21.jpeg" style="width:200px;border-radius:20px;margin-top:20px;box-shadow:0 0 30px #ff0080;">
 
-<button onclick="shareLove()">Share ❤️</button>
 </div>
 
 <script>
 
-/* MUSIC */
+/* START */
 
 function startJourney(){
 document.getElementById("music").play()
@@ -218,7 +248,7 @@ show("quiz")
 createHearts()
 }
 
-/* PAGE SHOW */
+/* SHOW PAGE */
 
 function show(id){
 document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"))
@@ -228,45 +258,25 @@ document.getElementById(id).classList.add("active")
 /* FLOAT HEARTS */
 
 function createHearts(){
-
 setInterval(()=>{
-
 let h=document.createElement("div")
 h.className="heart"
 h.innerHTML=["💖","💘","✨"][Math.floor(Math.random()*3)]
 h.style.left=Math.random()*100+"vw"
-
 document.body.appendChild(h)
-
 setTimeout(()=>h.remove(),4000)
-
 },300)
-
 }
 
 /* QUIZ */
 
+let love=0
+
 const questions=[
-{
-q:"My Favourite Color? 💙",
-options:["Blue","Red","Black","Pink"],
-answer:"Blue"
-},
-{
-q:"Where did we first meet? ❤️",
-options:["Temple","Beach","College","Bus Stop"],
-answer:"Temple"
-},
-{
-q:"Our Memorable Place? 🌊",
-options:["Lighthouse","Mall","Park","Cinema"],
-answer:"Lighthouse"
-},
-{
-q:"Who loves you the most? 😜",
-options:["Bhavani","Your Mom","Your Friend","Everyone"],
-answer:"Bhavani"
-}
+{q:"My Favourite Color? 💙",answer:"Blue"},
+{q:"Where did we first meet? ❤️",answer:"Temple"},
+{q:"Our Memorable Place? 🌊",answer:"Lighthouse"},
+{q:"Who loves you the most? 😜",answer:"Bhavani"}
 ]
 
 let current=0
@@ -275,21 +285,26 @@ function loadQuestion(){
 
 let q=questions[current]
 
-questionText.innerText=q.q
+document.getElementById("questionText").innerText=q.q
 
-options.innerHTML=""
+document.getElementById("answerInput").value=""
 
-q.options.forEach(opt=>{
+}
 
-let btn=document.createElement("div")
-btn.className="option"
-btn.innerText=opt
+function checkAnswer(){
 
-btn.onclick=function(){
+let input=document.getElementById("answerInput").value.trim().toLowerCase()
 
-if(opt===q.answer){
+let correct=questions[current].answer.toLowerCase()
+
+if(input===correct){
 
 blastHearts()
+
+love+=25
+
+document.getElementById("loveMeter").style.width=love+"%"
+document.getElementById("lovePercent").innerText="Love Meter ❤️ "+love+"%"
 
 current++
 
@@ -308,15 +323,9 @@ initGame()
 
 }else{
 
-alert("Wrong answer 😜 But I still love you ❤️")
+alert("Wrong answer 😜 Try again ❤️")
 
 }
-
-}
-
-options.appendChild(btn)
-
-})
 
 }
 
@@ -355,7 +364,6 @@ const images=[
 
 {src:"photos/img6.jpeg",pair:10},
 {src:"photos/img41.jpeg",pair:10}
-
 ]
 
 let firstCard=null
@@ -363,6 +371,8 @@ let lock=false
 let matched=0
 
 function initGame(){
+
+let board=document.getElementById("board")
 
 board.innerHTML=""
 
@@ -400,15 +410,15 @@ if(firstPair===secondPair){
 matched++
 firstCard=null
 
-if(matched===10){
+if(matched===4){
 
 document.getElementById("anniversaryMessage").style.display="block"
 
-blastHearts()
+fireworks()
 
 setTimeout(()=>{
-show("gallery")
-},3000)
+show("final")
+},2500)
 
 }
 
@@ -417,13 +427,10 @@ show("gallery")
 lock=true
 
 setTimeout(()=>{
-
 firstCard.classList.remove("open")
 card.classList.remove("open")
-
 firstCard=null
 lock=false
-
 },900)
 
 }
@@ -442,11 +449,12 @@ board.appendChild(card)
 
 function blastHearts(){
 
-for(let i=0;i<70;i++){
+for(let i=0;i<60;i++){
 
 let el=document.createElement("div")
 
 el.className="blast"
+
 el.innerHTML=Math.random()>0.5?"❤️":"✨"
 
 let x=(Math.random()*600-300)+"px"
@@ -463,6 +471,47 @@ document.body.appendChild(el)
 setTimeout(()=>el.remove(),1500)
 
 }
+
+}
+
+/* FIREWORKS */
+
+function fireworks(){
+
+for(let i=0;i<120;i++){
+
+let star=document.createElement("div")
+
+star.className="blast"
+
+star.innerHTML=Math.random()>0.5?"✨":"💖"
+
+star.style.left=Math.random()*100+"vw"
+star.style.top=Math.random()*100+"vh"
+
+let x=(Math.random()*600-300)+"px"
+let y=(Math.random()*600-300)+"px"
+
+star.style.setProperty("--x",x)
+star.style.setProperty("--y",y)
+
+document.body.appendChild(star)
+
+setTimeout(()=>star.remove(),1500)
+
+}
+
+}
+
+/* FINAL */
+
+function finalYes(){
+
+fireworks()
+
+setTimeout(()=>{
+show("gallery")
+},2000)
 
 }
 
@@ -488,9 +537,7 @@ if(i>=slides.length) i=0
 
 let slide=document.getElementById("slide")
 
-if(slide){
-slide.src=slides[i]
-}
+if(slide) slide.src=slides[i]
 
 },2500)
 
@@ -513,26 +560,13 @@ show("letter")
 
 let interval=setInterval(()=>{
 
-letterText.innerHTML+=text[index]
+document.getElementById("letterText").innerHTML+=text[index]
 
 index++
 
-if(index>=text.length){
-clearInterval(interval)
-}
+if(index>=text.length) clearInterval(interval)
 
 },40)
-
-}
-
-/* SHARE */
-
-function shareLove(){
-
-let url=window.location.href
-let text="A romantic surprise for you ❤️"
-
-window.open("https://wa.me/?text="+encodeURIComponent(text+" "+url))
 
 }
 
