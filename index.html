@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
+
 body{
 margin:0;
 font-family:'Poppins',sans-serif;
@@ -18,28 +18,19 @@ text-align:center;
 overflow:hidden;
 }
 
-/* SECTION */
 .section{
 display:none;
 height:100vh;
 justify-content:center;
 align-items:center;
 flex-direction:column;
-animation:fadeIn 1s ease;
-}
-.active{display:flex;}
-
-@keyframes fadeIn{
-from{opacity:0;transform:scale(.95)}
-to{opacity:1;transform:scale(1)}
+padding:20px;
 }
 
-/* HEADINGS */
-h1,h2{
-text-shadow:0 0 20px #ff4d9d,0 0 40px #ff0080;
+.active{
+display:flex;
 }
 
-/* BUTTON */
 button{
 padding:14px 35px;
 border:none;
@@ -48,386 +39,500 @@ cursor:pointer;
 background:linear-gradient(45deg,#ff0080,#ff4d6d);
 color:white;
 font-size:17px;
-font-weight:bold;
-box-shadow:0 0 20px #ff4d9d;
-transition:.4s;
 margin-top:20px;
-}
-button:hover{
-transform:scale(1.1);
-box-shadow:0 0 40px #ff0080,0 0 80px #ff4d9d;
+box-shadow:0 0 20px #ff0080;
 }
 
-/* INPUT */
-input{
-padding:14px;
-border-radius:40px;
-border:none;
-text-align:center;
-margin-top:20px;
-width:250px;
-font-size:16px;
-background:rgba(255,255,255,0.1);
-color:white;
-outline:none;
+.heart{
+position:absolute;
+font-size:25px;
+animation:float 4s linear infinite;
 }
 
-/* QUIZ BOX */
+@keyframes float{
+from{transform:translateY(100vh);}
+to{transform:translateY(-10vh);}
+}
+
+.blast{
+position:absolute;
+font-size:30px;
+animation:blastAnim 1.5s ease-out forwards;
+}
+
+@keyframes blastAnim{
+0%{transform:scale(0) translate(0,0);opacity:1;}
+100%{transform:scale(2) translate(var(--x),var(--y));opacity:0;}
+}
+
 .quiz-box{
 padding:40px;
 border-radius:25px;
 background:rgba(255,255,255,0.05);
-backdrop-filter:blur(15px);
 border:2px solid rgba(255,0,128,0.5);
-box-shadow:0 0 40px #ff0080;
 }
 
-/* STARS */
-.star{
-position:fixed;
-font-size:22px;
-pointer-events:none;
-transition:1s ease-out;
+.option{
+padding:12px 20px;
+margin:10px;
+border-radius:30px;
+background:#ff0080;
+cursor:pointer;
+display:inline-block;
+box-shadow:0 0 10px #ff0080;
 }
 
-/* GAME GRID */
+.option:hover{
+background:#ff4d6d;
+}
+
 .grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:15px;
-max-width:360px;
-margin:auto;
+gap:12px;
+max-width:340px;
+margin-top:20px;
 }
 
 .card{
 width:70px;
 height:70px;
-background:rgba(255,255,255,0.1);
+border-radius:20px;
+position:relative;
+transform-style:preserve-3d;
+transition:0.5s;
+cursor:pointer;
+}
+
+.card.open{
+transform:rotateY(180deg);
+}
+
+.card-front,
+.card-back{
+position:absolute;
+width:100%;
+height:100%;
 border-radius:20px;
 display:flex;
 align-items:center;
 justify-content:center;
-cursor:pointer;
-overflow:hidden;
+backface-visibility:hidden;
 }
-.card::before{
-content:"💖";
+
+.card-front{
+background:#ff0080;
 font-size:25px;
 }
-.card img{
+
+.card-back{
+transform:rotateY(180deg);
+}
+
+.card-back img{
 width:100%;
 height:100%;
 object-fit:cover;
-display:none;
+border-radius:20px;
 }
-.card.open img{display:block}
-.card.open::before{display:none}
 
-/* FINAL PHOTO */
-.photo{
+.gallery img{
 width:260px;
-border-radius:25px;
-margin-top:25px;
-box-shadow:0 0 40px #ff0080;
+border-radius:20px;
+box-shadow:0 0 30px #ff0080;
 }
 
-/* ANNIVERSARY TEXT */
-#anniversary h1{
-font-size:38px;
+.letter{
+max-width:500px;
+line-height:1.8;
+font-size:18px;
+min-height:180px;
 }
+
 </style>
 </head>
 
 <body>
 
-<!-- MUSIC -->
-<audio id="bgMusic" loop>
+<audio id="music" loop>
 <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <!-- INTRO -->
-<div id="intro" class="section active">
-<h1>This is not just a website…</h1>
-<h2>This is Our Love Story 💖</h2>
-</div>
 
-<!-- ENTER -->
-<div id="enter" class="section">
-<h1>Ready Jeeva? 💍</h1>
-<button onclick="startQuiz()">Enter Our Love Journey</button>
+<div id="intro" class="section active">
+<h1>For Jeeva ❤️</h1>
+<h2>From Bhavani</h2>
+<button onclick="startJourney()">Start Our Love Story</button>
 </div>
 
 <!-- QUIZ -->
+
 <div id="quiz" class="section">
 <div class="quiz-box">
 <h2 id="questionText"></h2>
-<input id="answerInput" placeholder="Type your answer...">
-<button onclick="nextQuestion()">Next ❤️</button>
+<div id="options"></div>
 </div>
-</div>
-
-<!-- BLAST -->
-<div id="blast" class="section">
-<h1 id="blastText"></h1>
 </div>
 
 <!-- GAME -->
+
 <div id="game" class="section">
 <h2>Match Our Memories 💞</h2>
 <div class="grid" id="board"></div>
+
+<div id="anniversaryMessage" style="display:none;font-size:30px;margin-top:20px;color:#ff4d9a;">
+Happy 1st Anniversary My Dear Vanna Manavey ❤️
+</div>
 </div>
 
-<!-- ANNIVERSARY -->
-<div id="anniversary" class="section">
-<h1>Happy 1st Wedding Anniversary 💍❤️</h1>
+<!-- GALLERY -->
+
+<div id="gallery" class="section">
+<h1>Our Beautiful Memories 📸</h1>
+<div class="gallery">
+<img id="slide" src="photos/img60.jpeg">
+</div>
+<button onclick="showLetter()">Next ❤️</button>
 </div>
 
-<!-- FINAL -->
-<div id="loveFinal" class="section">
-<h1>Forever Us 💖</h1>
+<!-- LETTER -->
 
-<p>
-One year down, forever to go ❤️<br><br>
-You are my today and all of my tomorrows 💍
-</p>
+<div id="letter" class="section">
+<h1>My Love 💌</h1>
+<p id="letterText" class="letter"></p>
 
-<img id="slideshow" class="photo" src="img1.jpeg">
+<img src="photos/img21.jpeg"
+style="width:200px;border-radius:20px;margin-top:20px;box-shadow:0 0 30px #ff0080;">
 
-<br>
-
-<button onclick="shareLove()">Share Our Love 💌</button>
+<button onclick="shareLove()">Share ❤️</button>
 </div>
 
 <script>
 
-/* PLAY MUSIC */
-document.addEventListener("click",()=>{
-document.getElementById("bgMusic").play();
-});
+/* MUSIC */
 
-/* FLOW */
-setTimeout(()=>show("enter"),3000);
+function startJourney(){
+document.getElementById("music").play()
+show("quiz")
+createHearts()
+}
+
+/* PAGE SHOW */
 
 function show(id){
-document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-
-if(id==="loveFinal"){
-fullBlast();
-}
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"))
+document.getElementById(id).classList.add("active")
 }
 
-/* QUIZ */
-const questions=[
-{q:"My Favourite Color?",a:"blue"},
-{q:"First Meeting Date?",a:"01-01-2024"},
-{q:"First Meeting Place?",a:"Murugar Temple"},
-{q:"Our Memorable Place?",a:"Light House"}
-];
+/* FLOAT HEARTS */
 
-let current=0;
-
-function startQuiz(){
-show("quiz");
-loadQuestion();
-}
-
-function loadQuestion(){
-questionText.innerText=questions[current].q;
-answerInput.value="";
-}
-
-function nextQuestion(){
-
-let val=answerInput.value.trim().toLowerCase();
-let ans=questions[current].a.toLowerCase();
-
-if(val===ans){
-
-sparkle();
-current++;
-
-if(current<questions.length){
-loadQuestion();
-}else{
-
-show("blast");
-
-setTimeout(()=>blastText.innerText="🎉 Congratulations Jeeva ❤️",1000);
-
-setTimeout(()=>{
-show("game");
-initGame();
-},3000);
-
-}
-
-}else{
-answerInput.style.animation="shake .3s";
-setTimeout(()=>answerInput.style.animation="",300);
-}
-
-}
-
-/* SPARKLE */
-function sparkle(){
-for(let i=0;i<25;i++){
-let s=document.createElement("div");
-s.className="star";
-s.innerText="✨";
-s.style.left=Math.random()*100+"vw";
-s.style.top=Math.random()*100+"vh";
-document.body.appendChild(s);
-
-setTimeout(()=>{
-s.style.opacity=0;
-s.remove();
-},800);
-}
-}
-
-/* MATCH GAME */
-
-const images=[
-"img1.jpeg","img1.jpeg",
-"img2.jpeg","img2.jpeg",
-"img3.jpeg","img3.jpeg",
-"img4.jpeg","img4.jpeg",
-"img5.jpeg","img5.jpeg"
-];
-
-let firstCard=null;
-let lock=false;
-let matched=0;
-
-function initGame(){
-
-board.innerHTML="";
-matched=0;
-firstCard=null;
-lock=false;
-
-let shuffled=[...images].sort(()=>0.5-Math.random());
-
-shuffled.forEach(src=>{
-
-let card=document.createElement("div");
-card.className="card";
-
-let img=document.createElement("img");
-img.src=src;
-
-card.appendChild(img);
-
-card.onclick=function(){
-
-if(lock || card.classList.contains("open")) return;
-
-card.classList.add("open");
-
-if(!firstCard){
-firstCard=card;
-}else{
-
-if(firstCard.querySelector("img").src===img.src){
-
-matched++;
-firstCard=null;
-
-if(matched===5){
-
-setTimeout(()=>show("anniversary"),1500);
-
-setTimeout(()=>show("loveFinal"),4000);
-
-}
-
-}else{
-
-lock=true;
-
-setTimeout(()=>{
-firstCard.classList.remove("open");
-card.classList.remove("open");
-firstCard=null;
-lock=false;
-},800);
-
-}
-
-}
-
-};
-
-board.appendChild(card);
-
-});
-
-}
-
-/* PHOTO SLIDESHOW */
-
-let slides=[
-"img1.jpeg",
-"img2.jpeg",
-"img3.jpeg",
-"img4.jpeg",
-"img5.jpeg"
-];
-
-let slideIndex=0;
+function createHearts(){
 
 setInterval(()=>{
 
-slideIndex++;
+let h=document.createElement("div")
+h.className="heart"
+h.innerHTML=["💖","💘","✨"][Math.floor(Math.random()*3)]
+h.style.left=Math.random()*100+"vw"
 
-if(slideIndex>=slides.length){
-slideIndex=0;
+document.body.appendChild(h)
+
+setTimeout(()=>h.remove(),4000)
+
+},300)
+
 }
 
-let slide=document.getElementById("slideshow");
+/* QUIZ */
+
+const questions=[
+{
+q:"My Favourite Color? 💙",
+options:["Blue","Red","Black","Pink"],
+answer:"Blue"
+},
+{
+q:"Where did we first meet? ❤️",
+options:["Temple","Beach","College","Bus Stop"],
+answer:"Temple"
+},
+{
+q:"Our Memorable Place? 🌊",
+options:["Lighthouse","Mall","Park","Cinema"],
+answer:"Lighthouse"
+},
+{
+q:"Who loves you the most? 😜",
+options:["Bhavani","Your Mom","Your Friend","Everyone"],
+answer:"Bhavani"
+}
+]
+
+let current=0
+
+function loadQuestion(){
+
+let q=questions[current]
+
+questionText.innerText=q.q
+
+options.innerHTML=""
+
+q.options.forEach(opt=>{
+
+let btn=document.createElement("div")
+btn.className="option"
+btn.innerText=opt
+
+btn.onclick=function(){
+
+if(opt===q.answer){
+
+blastHearts()
+
+current++
+
+if(current<questions.length){
+
+setTimeout(loadQuestion,800)
+
+}else{
+
+setTimeout(()=>{
+show("game")
+initGame()
+},800)
+
+}
+
+}else{
+
+alert("Wrong answer 😜 But I still love you ❤️")
+
+}
+
+}
+
+options.appendChild(btn)
+
+})
+
+}
+
+loadQuestion()
+
+/* MEMORY GAME */
+
+const images=[
+
+{src:"photos/img1.jpeg",pair:1},
+{src:"photos/img2.jpeg",pair:1},
+
+{src:"photos/img11.jpeg",pair:2},
+{src:"photos/img15.jpeg",pair:2},
+
+{src:"photos/img18.jpeg",pair:3},
+{src:"photos/img28.jpeg",pair:3},
+
+{src:"photos/img19.jpeg",pair:4},
+{src:"photos/img29.jpeg",pair:4},
+
+{src:"photos/img4.jpeg",pair:5},
+{src:"photos/img31.jpeg",pair:5},
+
+{src:"photos/img13.jpeg",pair:6},
+{src:"photos/img20.jpeg",pair:6},
+
+{src:"photos/img22.jpeg",pair:7},
+{src:"photos/img14.jpeg",pair:7},
+
+{src:"photos/img53.jpeg",pair:8},
+{src:"photos/img54.jpeg",pair:8},
+
+{src:"photos/img32.jpeg",pair:9},
+{src:"photos/img42.jpeg",pair:9},
+
+{src:"photos/img6.jpeg",pair:10},
+{src:"photos/img41.jpeg",pair:10}
+
+]
+
+let firstCard=null
+let lock=false
+let matched=0
+
+function initGame(){
+
+board.innerHTML=""
+
+let shuffled=[...images].sort(()=>0.5-Math.random())
+
+shuffled.forEach(data=>{
+
+let card=document.createElement("div")
+card.className="card"
+
+card.innerHTML=`
+<div class="card-front">💖</div>
+<div class="card-back">
+<img src="${data.src}" data-pair="${data.pair}">
+</div>
+`
+
+card.onclick=function(){
+
+if(lock||card.classList.contains("open")) return
+
+card.classList.add("open")
+
+if(!firstCard){
+
+firstCard=card
+
+}else{
+
+let firstPair=firstCard.querySelector("img").dataset.pair
+let secondPair=card.querySelector("img").dataset.pair
+
+if(firstPair===secondPair){
+
+matched++
+firstCard=null
+
+if(matched===10){
+
+document.getElementById("anniversaryMessage").style.display="block"
+
+blastHearts()
+
+setTimeout(()=>{
+show("gallery")
+},3000)
+
+}
+
+}else{
+
+lock=true
+
+setTimeout(()=>{
+
+firstCard.classList.remove("open")
+card.classList.remove("open")
+
+firstCard=null
+lock=false
+
+},900)
+
+}
+
+}
+
+}
+
+board.appendChild(card)
+
+})
+
+}
+
+/* BLAST */
+
+function blastHearts(){
+
+for(let i=0;i<70;i++){
+
+let el=document.createElement("div")
+
+el.className="blast"
+el.innerHTML=Math.random()>0.5?"❤️":"✨"
+
+let x=(Math.random()*600-300)+"px"
+let y=(Math.random()*600-300)+"px"
+
+el.style.setProperty("--x",x)
+el.style.setProperty("--y",y)
+
+el.style.left="50%"
+el.style.top="50%"
+
+document.body.appendChild(el)
+
+setTimeout(()=>el.remove(),1500)
+
+}
+
+}
+
+/* SLIDESHOW */
+
+let slides=[
+"photos/img60.jpeg",
+"photos/img55.jpeg",
+"photos/img56.jpeg",
+"photos/img57.jpeg",
+"photos/img61.jpeg",
+"photos/img62.jpeg",
+"photos/img63.jpeg"
+]
+
+let i=0
+
+setInterval(()=>{
+
+i++
+
+if(i>=slides.length) i=0
+
+let slide=document.getElementById("slide")
 
 if(slide){
-slide.src=slides[slideIndex];
+slide.src=slides[i]
 }
 
-},2500);
+},2500)
 
-/* WHATSAPP SHARE */
+/* LETTER */
+
+const text=`One year down… forever to go ❤️
+
+Through every smile, every tear,
+every moment — you have been my greatest blessing.
+
+Loving you is the most beautiful thing in my life.
+
+Happy Anniversary my love 💍`
+
+let index=0
+
+function showLetter(){
+
+show("letter")
+
+let interval=setInterval(()=>{
+
+letterText.innerHTML+=text[index]
+
+index++
+
+if(index>=text.length){
+clearInterval(interval)
+}
+
+},40)
+
+}
+
+/* SHARE */
 
 function shareLove(){
 
-let url=window.location.href;
+let url=window.location.href
+let text="A romantic surprise for you ❤️"
 
-let text="A small surprise for you ❤️";
-
-window.open("https://wa.me/?text="+encodeURIComponent(text+" "+url));
-
-}
-
-/* FINAL BLAST */
-
-function fullBlast(){
-
-for(let i=0;i<300;i++){
-
-let s=document.createElement("div");
-
-s.className="star";
-
-s.innerText=["✨","💖","⭐"][Math.floor(Math.random()*3)];
-
-s.style.left=Math.random()*100+"vw";
-s.style.top=Math.random()*100+"vh";
-
-document.body.appendChild(s);
-
-setTimeout(()=>{
-s.style.opacity=0;
-s.remove();
-},1200);
-
-}
+window.open("https://wa.me/?text="+encodeURIComponent(text+" "+url))
 
 }
 
@@ -435,4 +540,3 @@ s.remove();
 
 </body>
 </html>
-```
