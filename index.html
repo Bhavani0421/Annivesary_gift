@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
@@ -145,6 +146,7 @@ min-height:180px;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -207,8 +209,7 @@ Happy 1st Anniversary My Dear ❤️
 
 <h2>Will you stay with me forever?</h2>
 
-<button onclick="finalYes()">YES ❤️</button>
-<button onclick="finalYes()">FOREVER ❤️</button>
+<button onclick="finalYes()">YES ❤️</button> <button onclick="finalYes()">FOREVER ❤️</button>
 
 </div>
 
@@ -234,7 +235,32 @@ Happy 1st Anniversary My Dear ❤️
 
 <p id="letterText" class="letter"></p>
 
-<img src="photos/img21.jpeg" style="width:200px;border-radius:20px;margin-top:20px;box-shadow:0 0 30px #ff0080;">
+<img src="img21.jpeg" style="width:200px;border-radius:20px;margin-top:20px;box-shadow:0 0 30px #ff0080;">
+
+</div>
+
+<!-- BIG ANNIVERSARY SCREEN -->
+
+<div id="bigAnniversary" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+color:white;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:999;
+font-size:40px;
+text-align:center;
+">
+
+<h1>💖 Happy 1st Anniversary 💖</h1>
+<h2>Jeeva ❤️ Bhavani</h2>
+<p>Forever Together</p>
 
 </div>
 
@@ -274,9 +300,12 @@ let love=0
 
 const questions=[
 {q:"My Favourite Color? 💙",answer:"Blue"},
-{q:"Where did we first meet? ❤️",answer:"Temple"},
-{q:"Our Memorable Place? 🌊",answer:"Lighthouse"},
-{q:"Who loves you the most? 😜",answer:"Bhavani"}
+{q:"Where did we first meet? ❤️",answer:"Office"},
+{q:"Our Memorable Place? 🌊",answer:"Murugar Temple"},
+{q:"What are we celebrating today? 🎉",answer:"Our First Anniversary"},
+{q:"Who gets angry first? 😜",answer:"Jeeva"},
+{q:"Who always wins arguments? 😆",answer:"Jeeva"},
+{q:"Will you stay with me forever? ❤️",answer:"Yes"}
 ]
 
 let current=0
@@ -301,7 +330,7 @@ if(input===correct){
 
 blastHearts()
 
-love+=25
+love+=14
 
 document.getElementById("loveMeter").style.width=love+"%"
 document.getElementById("lovePercent").innerText="Love Meter ❤️ "+love+"%"
@@ -410,7 +439,7 @@ if(firstPair===secondPair){
 matched++
 firstCard=null
 
-if(matched===4){
+if(matched===10){
 
 document.getElementById("anniversaryMessage").style.display="block"
 
@@ -518,13 +547,14 @@ show("gallery")
 /* SLIDESHOW */
 
 let slides=[
-"img60.jpeg",
-"img55.jpeg",
-"img56.jpeg",
-"img57.jpeg",
+"img32.jpeg",
 "img61.jpeg",
-"img62.jpeg",
-"img63.jpeg"
+"img63.jpeg",
+"img64.jpeg",
+"img61.jpeg",
+"img63.jpeg",
+"img55.jpeg",
+"img56.jpeg"
 ]
 
 let i=0
